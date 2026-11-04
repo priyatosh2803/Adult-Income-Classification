@@ -4,7 +4,7 @@
 
 This project implements multiple machine learning classification models to predict whether an individual's annual income exceeds $50,000 based on demographic and employment-related features. This is a binary classification problem that helps understand the relationship between various socio-economic factors and income levels.
 
-**Objective**: Build and compare 6 different classification models (Logistic Regression, Decision Tree, K-Nearest Neighbors, Naive Bayes, Random Forest, and XGBoost) to predict income class and evaluate their performance using multiple metrics.
+**Objective**: Build and compare 5 different classification models (Logistic Regression, Decision Tree, K-Nearest Neighbors, Naive Bayes, and Support Vector Machine) on the same dataset to predict income class, and evaluate them using Accuracy, AUC, Precision, Recall, F1 Score, and MCC.
 
 ---
 
@@ -16,7 +16,7 @@ This project implements multiple machine learning classification models to predi
 - **URL**: https://archive.ics.uci.edu/ml/datasets/adult
 
 ### Dataset Characteristics:
-- **Total Instances**: 48,842 samples (after removing missing values)
+- **Total Instances**: 48,842 raw rows; 45,222 remain after removing rows with missing values (meets the minimum of 500)
 - **Number of Features**: 14 features (excluding target)
 - **Target Variable**: Binary classification
   - Class 0: Income ≤ $50K
@@ -31,22 +31,29 @@ This project implements multiple machine learning classification models to predi
 | workclass | Categorical | Employment type (Private, Self-emp, Federal-gov, etc.) |
 | fnlwgt | Continuous | Final weight (number of people census believes entry represents) |
 | education | Categorical | Highest level of education achieved |
-| education-num | Continuous | Numerical representation of education level |
+| educational-num | Continuous | Numerical representation of education level |
 | marital-status | Categorical | Marital status (Married-civ-spouse, Never-married, etc.) |
 | occupation | Categorical | Type of occupation |
 | relationship | Categorical | Relationship status (Husband, Wife, Own-child, etc.) |
 | race | Categorical | Race of the individual |
-| sex | Categorical | Gender (Male, Female) |
+| gender | Categorical | Gender (Male, Female) |
 | capital-gain | Continuous | Capital gains |
 | capital-loss | Continuous | Capital losses |
 | hours-per-week | Continuous | Average hours worked per week |
 | native-country | Categorical | Country of origin |
 
 ### Data Preprocessing:
-- Removed rows with missing values (indicated by '?')
-- Encoded categorical variables using Label Encoding
-- Applied Standard Scaling to numerical features
-- Split data into 80% training and 20% testing sets with stratification
+- Stripped leading/trailing whitespace from text columns
+- Removed the 3,620 rows containing missing values (indicated by '?')
+- Encoded the 8 categorical variables with `OrdinalEncoder` (unseen categories map to -1)
+- Applied `StandardScaler` to all features. Encoding and scaling are fit on the training split only, inside a scikit-learn Pipeline, to avoid data leakage
+- Split data into 80% training (36,177 rows) and 20% testing (9,045 rows) sets with stratification and `random_state=42`. The test split is saved as `test_data.csv`
+
+---
+
+## GitHub Repository Link
+
+<your-github-repository-url>
 
 ---
 
@@ -54,14 +61,15 @@ This project implements multiple machine learning classification models to predi
 
 ### Model Comparison Table
 
+Metrics are computed on the 9,045-row held-out test split (`test_data.csv`).
+
 | ML Model Name | Accuracy | AUC | Precision | Recall | F1 | MCC |
-|---------------|----------|-----|-----------|--------|----|----|
-| Logistic Regression | 0.8497 | 0.9018 | 0.7584 | 0.6351 | 0.6914 | 0.6152 |
-| Decision Tree | 0.8167 | 0.7421 | 0.6535 | 0.5838 | 0.6167 | 0.5082 |
-| K-Nearest Neighbors | 0.8384 | 0.8675 | 0.7258 | 0.5925 | 0.6525 | 0.5729 |
-| Naive Bayes | 0.8263 | 0.8845 | 0.6951 | 0.6193 | 0.6550 | 0.5464 |
-| Random Forest (Ensemble) | 0.8642 | 0.9138 | 0.7889 | 0.6742 | 0.7268 | 0.6542 |
-| XGBoost (Ensemble) | 0.8721 | 0.9251 | 0.8045 | 0.6936 | 0.7448 | 0.6798 |
+|---------------|----------|-----|-----------|--------|----|-----|
+| Logistic Regression | 0.8172 | 0.8473 | 0.7075 | 0.4478 | 0.5485 | 0.4592 |
+| Decision Tree | 0.8480 | 0.8931 | 0.7141 | 0.6450 | 0.6778 | 0.5799 |
+| K-Nearest Neighbors | 0.8210 | 0.8455 | 0.6597 | 0.5740 | 0.6139 | 0.5001 |
+| Naive Bayes | 0.7947 | 0.8478 | 0.6717 | 0.3359 | 0.4478 | 0.3692 |
+| Support Vector Machine | 0.8460 | 0.8912 | 0.7574 | 0.5571 | 0.6420 | 0.5572 |
 
 ---
 
@@ -69,43 +77,41 @@ This project implements multiple machine learning classification models to predi
 
 | ML Model Name | Observation about model performance |
 |---------------|-------------------------------------|
-| **Logistic Regression** | Demonstrates good baseline performance with 84.97% accuracy. The model shows strong AUC (0.9018) indicating excellent discrimination ability between classes. However, precision is higher than recall, suggesting the model is conservative in predicting high-income class. Good balance between interpretability and performance. |
-| **Decision Tree** | Shows the lowest performance among all models with 81.67% accuracy and lowest AUC (0.7421). The model tends to overfit training data and generalizes poorly. The relatively balanced precision (0.6535) and recall (0.5838) indicate moderate performance on both classes. Decision boundaries created by the tree are too rigid for this dataset. |
-| **K-Nearest Neighbors** | Achieves moderate performance with 83.84% accuracy and good AUC (0.8675). The model performs better than Decision Tree but lacks the robustness of ensemble methods. High precision (0.7258) but lower recall (0.5925) suggests the model is selective in predicting positive class. Performance is sensitive to the choice of k-value and distance metric. |
-| **Naive Bayes** | Delivers reasonable performance (82.63% accuracy) considering its simplicity and strong independence assumption. Good AUC score (0.8845) shows effective probability calibration. The balanced precision (0.6951) and recall (0.6193) make it suitable for scenarios where false positives and negatives are equally important. Fast training and prediction times make it practical for large datasets. |
-| **Random Forest (Ensemble)** | Shows strong performance with 86.42% accuracy, outperforming all individual classifiers. Excellent AUC (0.9138) and good balance between precision (0.7889) and recall (0.6742). The ensemble approach reduces overfitting seen in individual decision trees. Feature importance from Random Forest provides valuable insights into key income predictors. Robust to outliers and handles non-linear relationships well. |
-| **XGBoost (Ensemble)** | Achieves the best overall performance with 87.21% accuracy and highest AUC (0.9251). Superior precision (0.8045) and recall (0.6936) balance demonstrates excellent discrimination ability. The highest MCC score (0.6798) confirms robust performance across both classes. Gradient boosting with regularization prevents overfitting effectively. Handles feature interactions and non-linearities exceptionally well. **Recommended model for deployment** due to superior performance across all metrics. |
+| **Logistic Regression** | Accuracy 0.8172 and AUC 0.8473. Precision (0.7075) is reasonable, but recall is only 0.4478, so the model misses more than half of the >50K earners. As a linear model it cannot capture the non-linear feature interactions that the tree and SVM exploit. |
+| **Decision Tree** | Best on accuracy (0.8480), AUC (0.8931), recall (0.6450), F1 (0.6778) and MCC (0.5799). Its precision (0.7141) and recall are the most balanced of the five. Limiting `max_depth` to 10 keeps the tree from growing too deep. |
+| **K-Nearest Neighbors** | Accuracy 0.8210 and AUC 0.8455. Recall (0.5740) trails precision (0.6597). Performance depends on feature scaling and on k=5, which was not tuned. |
+| **Naive Bayes** | Lowest accuracy (0.7947) and lowest recall (0.3359), so it misses about two-thirds of the high earners. Gaussian NB assumes independent, normally distributed features, which the skewed capital-gain and capital-loss columns and correlated education features violate. Its AUC (0.8478) is much higher than its recall suggests, so the main weakness is the default decision threshold. |
+| **Support Vector Machine** | Accuracy 0.8460 and AUC 0.8912, second only to Decision Tree. Highest precision of all five models (0.7574), so its positive predictions are the most reliable, but recall (0.5571) is lower than the tree's. Uses the default RBF kernel without tuning. |
+| **Overall winner for this dataset?** | **Decision Tree** (`max_depth=10`), which ranks first on Accuracy, AUC, Recall, F1 and MCC. SVM is a close second. The gap is small and comes from a single stratified train/test split without cross-validation, so it should not be treated as a definitive ranking. |
 
 ### Key Insights:
-1. **Ensemble Methods Dominate**: Both Random Forest and XGBoost significantly outperform individual classifiers, with XGBoost achieving the best results.
-2. **Trade-off Observation**: Most models show higher precision than recall, indicating they are conservative in predicting the high-income class.
-3. **AUC as Key Metric**: All models except Decision Tree achieve AUC > 0.85, showing good class separation capability.
-4. **MCC Correlation**: Matthews Correlation Coefficient rankings align well with accuracy rankings, validating consistent performance.
-5. **Decision Tree Limitation**: Despite its interpretability, the basic Decision Tree classifier shows clear signs of overfitting and poor generalization.
+1. **Decision Tree leads overall**: it ranks first on every metric except precision, where SVM is highest (0.7574).
+2. **Precision exceeds recall for every model**: all five are conservative in predicting the high-income class.
+3. **AUC is above 0.84 for all models**: each model ranks the two classes reasonably well. The bigger differences lie in recall, which depends on the decision threshold.
+4. **MCC agrees with accuracy**: both rank the models in the same order (Decision Tree, SVM, KNN, Logistic Regression, Naive Bayes).
+5. **Hyperparameters were not tuned**: the Decision Tree depth limit and the other settings were chosen once, so a tuned model may change the ranking.
 
 ---
 
 ## Project Structure
 
 ```
-ML_Assignment_2/
+Adult-Income-Classification/
 │
 ├── app.py                          # Streamlit web application
 ├── requirements.txt                # Python dependencies
 ├── README.md                       # Project documentation
-├── test_data.csv                   # Test dataset for Streamlit app
+├── adult.csv                       # Full source dataset
+├── test_data.csv                   # 20% held-out test split for Streamlit app
 │
 └── model/                          # Model directory
-    ├── train_models.py             # Training script for all models
-    ├── results.txt                 # Detailed results and metrics
-    ├── scaler.pkl                  # Saved StandardScaler
-    ├── label_encoders.pkl          # Saved Label Encoders
-    ├── logistic_regression_model.pkl
-    ├── decision_tree_model.pkl
-    ├── k-nearest_neighbors_model.pkl
-    ├── naive_bayes_model.pkl
-    ├── random_forest_model.pkl
-    └── xgboost_model.pkl
+    ├── train_models.py             # Training and evaluation script
+    ├── metrics.csv                 # Metrics for all 5 models
+    ├── logistic_regression.joblib
+    ├── decision_tree.joblib
+    ├── knn.joblib
+    ├── naive_bayes.joblib
+    └── svm.joblib
 ```
 
 ---
@@ -119,7 +125,7 @@ ML_Assignment_2/
 ### Step 1: Clone the Repository
 ```bash
 git clone <your-repository-url>
-cd ML_Assignment_2
+cd Adult-Income-Classification
 ```
 
 ### Step 2: Install Dependencies
@@ -133,13 +139,11 @@ python model/train_models.py
 ```
 
 This will:
-- Download the Adult Income dataset from UCI repository
-- Preprocess the data
-- Train all 6 classification models
-- Calculate evaluation metrics
-- Save trained models in the `model/` directory
-- Generate `test_data.csv` for the Streamlit app
-- Create `results.txt` with detailed results
+- Load `adult.csv` from the repository root and remove rows with missing values
+- Split into 80% train and 20% test (stratified) and save the test split as `test_data.csv`
+- Train the 5 classification models inside a preprocessing pipeline
+- Save the trained models to `model/*.joblib`
+- Calculate evaluation metrics and save them to `model/metrics.csv`
 
 ### Step 4: Run Streamlit App Locally
 ```bash
@@ -154,9 +158,9 @@ The app will open in your browser at `http://localhost:8501`
 
 The interactive web application includes:
 
-1. **📌 Model Selection Dropdown**: Choose from 6 trained classification models
-2. **📁 Dataset Upload**: Upload test data in CSV format (with 'income' target column)
-3. **📊 Dataset Overview**: Display dataset statistics and sample data
+1. **📌 Model Selection Dropdown**: Choose one of the 5 trained classification models
+2. **📁 Dataset Upload**: Upload test data in CSV format with the 14 feature columns and the `income` target column. If nothing is uploaded, the bundled `test_data.csv` is used
+3. **📊 Model Comparison Table**: Metrics for all 5 models on the test data
 4. **📈 Evaluation Metrics Display**: 
    - Accuracy
    - AUC Score
@@ -164,10 +168,8 @@ The interactive web application includes:
    - Recall
    - F1 Score
    - Matthews Correlation Coefficient (MCC)
-5. **🎯 Confusion Matrix**: Visual representation with heatmap
+5. **🎯 Confusion Matrix**: Actual vs predicted counts for the selected model
 6. **📋 Classification Report**: Detailed per-class metrics
-7. **📊 Prediction Distribution**: Compare actual vs predicted class distributions
-8. **💾 Download Results**: Export predictions as CSV file
 
 ---
 
@@ -214,13 +216,12 @@ The interactive web application includes:
 3. Upload `test_data.csv` or your own test dataset
 4. Select a model from the dropdown
 5. View metrics, confusion matrix, and classification report
-6. Download prediction results
 
 ### For Deployed App:
 1. Open the Streamlit Cloud URL
 2. Upload your test dataset (CSV format)
 3. Select desired classification model
-4. Analyze results and download predictions
+4. Analyze results for each model
 
 **Note**: Due to Streamlit Cloud's free tier limitations, upload only test data (not the entire dataset).
 
@@ -229,13 +230,11 @@ The interactive web application includes:
 ## Requirements
 
 ```
-streamlit==1.31.0
-scikit-learn==1.4.0
-numpy==1.26.3
-pandas==2.1.4
-matplotlib==3.8.2
-seaborn==0.13.1
-xgboost==2.0.3
+streamlit==1.66.1
+scikit-learn==1.9.1
+pandas==3.1.0
+numpy==2.4.6
+joblib==1.6.0
 ```
 
 ---
@@ -245,15 +244,14 @@ xgboost==2.0.3
 - **Train-Test Split**: 80-20 ratio with stratification
 - **Random State**: 42 (for reproducibility)
 - **Cross-validation**: Not applied (can be added for hyperparameter tuning)
-- **Hyperparameters**: Default scikit-learn and XGBoost settings
+- **Hyperparameters**: Default scikit-learn settings unless listed below
 
 ### Model-Specific Configurations:
 - **Logistic Regression**: max_iter=1000
 - **Decision Tree**: max_depth=10
 - **KNN**: n_neighbors=5
 - **Naive Bayes**: Gaussian NB (default)
-- **Random Forest**: n_estimators=100, max_depth=10
-- **XGBoost**: n_estimators=100, max_depth=6
+- **Support Vector Machine**: kernel='rbf' (default C=1.0, gamma='scale')
 
 ---
 
@@ -291,8 +289,7 @@ This project was completed as part of ML Assignment 2 for M.Tech (AIML/DSE) prog
    - Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
 
 2. Scikit-learn Documentation: https://scikit-learn.org/
-3. XGBoost Documentation: https://xgboost.readthedocs.io/
-4. Streamlit Documentation: https://docs.streamlit.io/
+3. Streamlit Documentation: https://docs.streamlit.io/
 
 ---
 
