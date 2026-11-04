@@ -53,7 +53,7 @@ This project implements multiple machine learning classification models to predi
 
 ## GitHub Repository Link
 
-<your-github-repository-url>
+https://github.com/priyatosh2803/Adult-Income-Classification
 
 ---
 
