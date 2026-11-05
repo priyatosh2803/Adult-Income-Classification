@@ -269,13 +269,14 @@ joblib==1.6.0
 
 ## Academic Integrity
 
-This project was completed as part of ML Assignment 2 for M.Tech (AIML/DSE) program. All code is original and developed specifically for this assignment. The Adult Income dataset is publicly available from UCI Machine Learning Repository.
+This project was completed as part of ML Assignment 2 for M.Tech AIML program. All code is original and developed specifically for this assignment. The Adult Income dataset is publicly available from UCI Machine Learning Repository.
 
 
 ---
 
 ## Author
 
+**Name**: Priyatosh Sahoo
 **Course**: Machine Learning  
 **Program**: M.Tech (AIML)  
 **Assignment**: ML Assignment 2  
