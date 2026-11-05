@@ -57,6 +57,12 @@ https://github.com/priyatosh2803/Adult-Income-Classification
 
 ---
 
+## Live Streamlit App
+
+https://adult-income-classification-wilp-ml-assignment2-2026ak05029.streamlit.app/
+
+---
+
 ## Models Used
 
 ### Model Comparison Table
@@ -124,7 +130,7 @@ Adult-Income-Classification/
 
 ### Step 1: Clone the Repository
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/priyatosh2803/Adult-Income-Classification.git
 cd Adult-Income-Classification
 ```
 
@@ -188,7 +194,7 @@ The interactive web application includes:
    git add .
    git commit -m "Initial commit: ML Assignment 2"
    git branch -M main
-   git remote add origin <your-repo-url>
+   git remote add origin https://github.com/priyatosh2803/Adult-Income-Classification.git
    git push -u origin main
    ```
 
