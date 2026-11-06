@@ -176,6 +176,17 @@ The interactive web application includes:
    - Matthews Correlation Coefficient (MCC)
 5. **🎯 Confusion Matrix**: Actual vs predicted counts for the selected model
 6. **📋 Classification Report**: Detailed per-class metrics
+7. **🎨 Responsive Dashboard UI**: Styled data-upload, model-comparison, metric, confusion-matrix, and classification-report sections for clearer navigation
+
+### Dashboard Design
+
+- Gradient header introducing the Adult Income Classification task
+- Numbered, color-accented sections for test data, model comparison, model selection, confusion matrix, and classification report
+- Six individually color-accented metric cards for Accuracy, AUC, Precision, Recall, F1, and MCC
+- Comparison table with four-decimal metric formatting and a caption identifying the top accuracy on the current test set
+- Separate bordered panels for the confusion matrix and classification report, with a responsive header and page layout
+
+These are presentation changes only. The saved models, preprocessing, evaluation metrics, and no-retraining behavior remain unchanged.
 
 ---
 
