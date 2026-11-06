@@ -12,8 +12,8 @@ This project implements multiple machine learning classification models to predi
 
 **Dataset**: Adult Income Dataset (also known as "Census Income" dataset)
 
-**Source**: UCI Machine Learning Repository
-- **URL**: https://archive.ics.uci.edu/ml/datasets/adult
+**Source**: Kaggle - Adult income dataset by Wenruliu
+- **URL**: https://www.kaggle.com/datasets/wenruliu/adult-income-dataset
 
 ### Dataset Characteristics:
 - **Total Instances**: 48,842 raw rows; 45,222 remain after removing rows with missing values (meets the minimum of 500)
@@ -286,7 +286,7 @@ joblib==1.6.0
 
 ## Academic Integrity
 
-This project was completed as part of ML Assignment 2 for M.Tech AIML program. All code is original and developed specifically for this assignment. The Adult Income dataset is publicly available from UCI Machine Learning Repository.
+This project was completed as part of ML Assignment 2 for M.Tech AIML program. All code is original and developed specifically for this assignment. The Adult Income dataset used in this project was obtained from Kaggle.
 
 
 ---
@@ -303,8 +303,7 @@ This project was completed as part of ML Assignment 2 for M.Tech AIML program. A
 
 ## References
 
-1. UCI Machine Learning Repository: Adult Income Dataset
-   - Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
+1. Wenruliu. Adult income dataset. Kaggle: https://www.kaggle.com/datasets/wenruliu/adult-income-dataset
 
 2. Scikit-learn Documentation: https://scikit-learn.org/
 3. Streamlit Documentation: https://docs.streamlit.io/
